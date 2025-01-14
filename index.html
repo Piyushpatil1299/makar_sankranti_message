@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Makar Sankranti</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #container {
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background: linear-gradient(45deg, #FF4500, #FF6347);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #FF6347, #FF4500);
+            transform: scale(1.1);
+        }
+
+        .typewriter {
+            font-size: 6rem;
+            color: #FFFFFF;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: bounce 2s infinite, glowCycle 3s infinite;
+        }
+
+        /* Text shadow effect */
+        #makarText, #sankrantiText {
+            text-shadow: 3px 3px 5px black, 0 0 10px #FFFACD, 0 0 20px #FFD700, 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes glowCycle {
+            0%, 100% {
+                text-shadow: 
+                    0 0 20px #FFD700,
+                    0 0 40px rgba(255, 223, 0, 0.8),
+                    0 0 60px #FFA500;
+            }
+            50% {
+                text-shadow: 
+                    0 0 40px #FFD700,
+                    0 0 80px #FFA07A,
+                    0 0 100px #FF6347;
+            }
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
+        }
+
+        .kite {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            background: linear-gradient(135deg, #FFA500, #FF4500);
+            animation: fly 10s linear infinite;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: floatUp 3s infinite ease-in-out;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="btn" id="startBtn">OPEN</button>
+
+    <div id="container">
+        <div class="typewriter" id="makarText"></div>
+        <div class="typewriter" id="sankrantiText"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const container = document.getElementById('container');
+        const makarText = document.getElementById('makarText');
+        const sankrantiText = document.getElementById('sankrantiText');
+        const makarMessage = "HAPPY MAKAR";
+        const sankrantiMessage = "SANKRANTI";
+
+        // Show container and start typewriter effect
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none';
+            container.style.display = 'block';
+            typewriterEffect(makarMessage, makarText, 0);
+            createKites(20);  // Start kite animation
+            setInterval(createSparkles, 300);  // Start sparkle effect
+        });
+
+        // Typewriter effect
+        function typewriterEffect(text, element, index = 0) {
+            if (index < text.length) {
+                const span = document.createElement('span');
+                span.textContent = text[index];
+                span.style.display = 'inline-block';
+                span.style.animation = 'bounce 1s ease-in-out infinite';
+                span.style.animationDelay = `${index * 0.1}s`;
+
+                element.appendChild(span);
+                setTimeout(() => typewriterEffect(text, element, index + 1), 150);
+            } else if (element === makarText) {
+                setTimeout(() => typewriterEffect(sankrantiMessage, sankrantiText, 0), 500);
+            }
+        }
+
+        // Create kites flying in the background
+        function createKites(num) {
+            for (let i = 0; i < num; i++) {
+                const kite = document.createElement('div');
+                kite.classList.add('kite');
+                kite.style.left = `${Math.random() * window.innerWidth}px`;
+                kite.style.animationDelay = `${Math.random() * 5}s`;
+                kite.style.background = `linear-gradient(135deg, ${getRandomColor()}, ${getRandomColor()})`;
+
+                document.body.appendChild(kite);
+            }
+        }
+
+        // Create sparkle effects
+        function createSparkles() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+            sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+            sparkle.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            sparkle.style.backgroundColor = getRandomColor();
+
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 3000);
+        }
+
+        // Generate random color
+        function getRandomColor() {
+            const colors = ['#FFA500', '#FF6347', '#FFD700', '#FF69B4', '#32CD32', '#1E90FF'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+</html>
